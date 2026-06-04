@@ -5,6 +5,34 @@ spring:
   application:
     name: notification-service
 
+  mail:
+    host: smtp.poczta.onet.pl
+    port: 587
+    username: ${EMAIL_USER:default}
+    password: ${EMAIL_PASSWORD:default}
+    protocol: smtp
+    properties:
+      mail:
+        from: ${EMAIL_USER:default}
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        include:
+          headers: "*"
+    listener:
+      ack-mode: record
+
 
 management:
   endpoints:
@@ -57,30 +85,4 @@ logging:
 springdoc:
   show-actuator: true
 
-  mail:
-    host: smtp.poczta.onet.pl
-    port: 587
-    username: ${EMAIL_USER:default}
-    password: ${EMAIL_PASSWORD:default}
-    protocol: smtp
-    properties:
-      mail:
-        from: ${EMAIL_USER:default}
-        smtp:
-          auth: true
-          starttls:
-            enable: true
 
-  kafka:
-    bootstrap-servers: kafka:9092
-    consumer:
-      group-id: notification-group
-      auto-offset-reset: earliest
-      enable-auto-commit: false
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      properties:
-        include:
-          headers: "*"
-    listener:
-      ack-mode: record
