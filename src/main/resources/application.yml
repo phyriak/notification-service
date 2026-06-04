@@ -1,0 +1,105 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: notification-service
+
+##Add schema
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/mydb}
+    username: ${DB_USERNAME:order_service}
+    password: ${DB_PASSWORD:order_service}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db/changelog-master.yaml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, prometheus
+
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+
+  tracing:
+    sampling:
+      probability: 1.0
+
+  otlp:
+    tracing:
+      endpoint: ${OTEL_ENDPOINT:http://localhost:4320/v1/traces}
+
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+
+    tags:
+      application: notification-service
+
+logging:
+  file:
+    name: logs/notification-service.log
+
+    pattern:
+      correlation: "[%X{traceId:-},%X{spanId:-}] "
+
+springdoc:
+  show-actuator: true
+
+  mail:
+    host: smtp.poczta.onet.pl
+    port: 587
+    username: ${EMAIL_USER:default}
+    password: ${EMAIL_PASSWORD:default}
+    protocol: smtp
+    properties:
+      mail:
+        from: ${EMAIL_USER:default}
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        include:
+          headers: "*"
+    listener:
+      ack-mode: record
