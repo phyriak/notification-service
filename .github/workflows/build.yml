@@ -63,6 +63,13 @@ jobs:
             --name notification-service \
             --restart unless-stopped \
             -p 8089:8089 \
+            -e SPRING_PROFILES_ACTIVE="${{ secrets.SPRING_PROFILES_ACTIVE }}" \
+            -e DB_URL="${{ secrets.DB_URL }}" \
+            -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+            -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            -e DB_SCHEMA="${{ secrets.DB_SCHEMA }}" \
+            -e EMAIL_USER="${{ secrets.EMAIL_USER }}" \
+            -e EMAIL_PASSWORD="${{ secrets.EMAIL_PASSWORD }}" \
             phyriak/notification-service:latest
 
             echo "Waiting for application..."
