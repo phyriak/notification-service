@@ -1,0 +1,46 @@
+server:
+  port: 8089
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:notificationdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+
+    hibernate:
+      ddl-auto: create-drop
+
+    properties:
+      hibernate:
+        jdbc.batch_size: 1000
+        order_inserts: true
+        order_updates: true
+
+  liquibase:
+    enabled: false
+
+  flyway:
+    enabled: false
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+  mail:
+    host: smtp.poczta.onet.pl
+    port: 587
+    username: piotr_hyriak@op.pl
+    password: simson1
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG

@@ -1,5 +1,7 @@
 package com.phyriak.newsletter;
 
+import com.phyriak.consumer.PaymentProcessedEvent;
+import com.phyriak.repository.model.ProcessedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +21,9 @@ public class NotificationService {
 
     public void signup(NewsLetterSignupEvent signupEvent){
         publisher.publishEvent(signupEvent);
+    }
+
+    public void paymentNotify(Object event){
+        publisher.publishEvent(event);
     }
 }

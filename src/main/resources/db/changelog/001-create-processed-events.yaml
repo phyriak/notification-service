@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-processed-events
+      author: phyriak
+
+      changes:
+        - createTable:
+            tableName: processed_events
+
+            columns:
+              - column:
+                  name: event_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: processed_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
