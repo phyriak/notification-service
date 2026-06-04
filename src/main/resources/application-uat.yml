@@ -1,6 +1,7 @@
 server:
   port: 8089
 
+spring:
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5433/ecommerce?currentSchema=${DB_SCHEMA}}
     username: ${DB_USERNAME}
@@ -14,9 +15,9 @@ server:
     hibernate:
       ddl-auto: update
 
-    liquibase:
-      enabled: true
-      change-log: classpath:db/changelog/db/changelog-master.yaml
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db/changelog-master.yaml
 
     properties:
       hibernate:
