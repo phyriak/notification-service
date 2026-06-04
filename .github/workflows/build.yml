@@ -61,6 +61,7 @@ jobs:
 
             docker run -d \
             --name notification-service \
+            --network ecommerce-network \
             --restart unless-stopped \
             -p 8089:8089 \
             -e SPRING_PROFILES_ACTIVE="${{ secrets.SPRING_PROFILES_ACTIVE }}" \
