@@ -63,7 +63,7 @@ jobs:
             --name notification-service \
             --restart unless-stopped \
             -p 8089:8089 \
-            -e SPRING_PROFILES_ACTIVE="${{ secrets.SPRING_PROFILES_ACTIVE }}" \
+            -e SPRING_PROFILES_ACTIVE="${{ secrets.SPRING_PROFILES_ACTIVE:uat }}" \
             -e DB_URL="${{ secrets.DB_URL }}" \
             -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
