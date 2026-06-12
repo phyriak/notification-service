@@ -39,6 +39,8 @@ public class KafkaConsumer {
             groupId = "notification-group"
     )
     public void listenPayment(String message) throws Exception {
+        log.info("Received raw payment message: {}", message);
+
         try {
             PaymentProcessedEvent event =
                     objectMapper.readValue(message, PaymentProcessedEvent.class);
