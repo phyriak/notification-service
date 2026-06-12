@@ -15,15 +15,6 @@ spring:
     hibernate:
       ddl-auto: update
 
-  mail:
-    host: smtp.poczta.onet.pl
-    port: 587
-    username: ${EMAIL_USER}
-    password: ${EMAIL_PASSWORD}
-
-    kafka:
-      bootstrap-servers: kafka:9092
-
 
   liquibase:
     enabled: true
