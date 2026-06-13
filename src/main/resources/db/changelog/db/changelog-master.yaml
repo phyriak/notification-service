@@ -4,4 +4,4 @@ databaseChangeLog:
       file: db/changelog/changes/001-create-processed-events.yaml
 
   - include:
-      file: db/changelog/changes/002-create-notifications.yaml
+      file: db/changelog/changes/002-create-notification-events.yaml
