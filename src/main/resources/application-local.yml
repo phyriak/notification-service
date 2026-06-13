@@ -29,9 +29,6 @@ spring:
   liquibase:
     enabled: false
 
-  flyway:
-    enabled: false
-
   kafka:
     bootstrap-servers: localhost:9092
 

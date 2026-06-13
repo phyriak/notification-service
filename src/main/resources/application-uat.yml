@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://postgres-db:5432/ecommerce?currentSchema=${DB_SCHEMA}}
+    url: ${DB_URL:jdbc:postgresql://postgres-db:5432/ecommerce?currentSchema=${DB_SCHEMA:notification_service_uat}}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -11,28 +11,23 @@ spring:
   jpa:
     show-sql: false
     open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+
+    properties:
+      hibernate:
+        default_schema: ${DB_SCHEMA:notification_service_uat}
+        jdbc.batch_size: 1000
+        order_inserts: true
+        order_updates: true
 
 
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db/changelog-master.yaml
 
-    properties:
-      hibernate:
-        default_schema: ${DB_SCHEMA}
-        jdbc.batch_size: 1000
-        order_inserts: true
-        order_updates: true
-
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    schemas: ${DB_SCHEMA}
 
   mail:
     host: smtp.poczta.onet.pl
@@ -59,6 +54,7 @@ spring:
       properties:
         include:
           headers: "*"
+
     listener:
       ack-mode: record
 
