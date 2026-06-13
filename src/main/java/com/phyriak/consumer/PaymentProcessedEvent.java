@@ -12,6 +12,7 @@ public record PaymentProcessedEvent(
         Long orderId,
         BigDecimal amount,
         String currency,
-        Instant processedAt
+        Instant processedAt,
+        String email
 ) {
 }

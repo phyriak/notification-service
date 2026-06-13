@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "notifications")
+@Builder
+@AllArgsConstructor
 public class NotificationEntity {
 
     @Id

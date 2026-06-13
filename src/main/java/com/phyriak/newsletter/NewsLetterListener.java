@@ -1,19 +1,24 @@
 package com.phyriak.newsletter;
 
+import com.phyriak.consumer.PaymentProcessedEvent;
 import com.phyriak.mapper.NotificationMapper;
 import com.phyriak.model.NotificationEntity;
 import com.phyriak.repository.NotificationRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @AllArgsConstructor
+@Slf4j
 public class NewsLetterListener {
 
     private final JavaMailSender mailSender;
@@ -33,6 +38,6 @@ public class NewsLetterListener {
         mailSender.send(message);
         //save to db
         NotificationEntity entity = notificationMapper.toEntity(event);
-     //   notificationRepository.save(entity);
+        //   notificationRepository.save(entity);
     }
 }
