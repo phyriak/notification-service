@@ -27,6 +27,8 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db/changelog-master.yaml
+    default-schema: notification_service_uat
+    liquibase-schema: notification_service_uat
 
 
   mail:
