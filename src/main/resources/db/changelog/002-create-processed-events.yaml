@@ -1,22 +1,65 @@
 databaseChangeLog:
   - changeSet:
-      id: 002-create-processed-events
+      id: 002-create-notifications
       author: phyriak
 
       changes:
         - createTable:
-            tableName: processed_events
+            tableName: notifications
 
             columns:
               - column:
-                  name: event_id
-                  type: uuid
+                  name: id
+                  type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
 
               - column:
-                  name: processed_at
-                  type: timestamp
+                  name: user_id
+                  type: bigint
                   constraints:
                     nullable: false
+
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: subject
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: message
+                  type: varchar(5000)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: retry_count
+                  type: integer
+
+              - column:
+                  name: created_at
+                  type: timestamp
+
+              - column:
+                  name: sent_at
+                  type: timestamp
