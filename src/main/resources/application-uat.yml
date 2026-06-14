@@ -34,12 +34,12 @@ spring:
   mail:
     host: smtp.poczta.onet.pl
     port: 587
-    username: ${EMAIL_USER:default}
-    password: ${EMAIL_PASSWORD:default}
+    username: ${EMAIL_USER}
+    password: ${EMAIL_PASSWORD}
     protocol: smtp
     properties:
       mail:
-        from: ${EMAIL_USER:default}
+        from: ${EMAIL_USER}
         smtp:
           auth: true
           starttls:

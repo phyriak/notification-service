@@ -102,7 +102,7 @@ public class PaymentListener {
         MimeMessageHelper helper =
                 new MimeMessageHelper(message, true);
 
-        helper.setFrom("piotr_hyriak@op.pl");
+        helper.setFrom(properties.systemEmail());
         helper.setTo(event.email());
         helper.setSubject(
                 "Payment Confirmation #" + event.paymentId()
