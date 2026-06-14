@@ -18,5 +18,5 @@ management:
         include: info,health,prometheus
 
 notification:
-   system-email: ${EMAIL_USER:piotr_hyriak@op.pl}
+   system-email: ${SENDER_EMAIL}
    retry-count: 3
