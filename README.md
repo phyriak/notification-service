@@ -312,4 +312,76 @@ Flyway
 9. Full Kubernetes Platform
 
 ```
+
+### Notification Service
+
+---
+
+#### Notification Flow
+
+```text
+Payment Service
+    ↓
+PaymentProcessedEvent
+    ↓
+Apache Kafka
+    ↓
+Notification Service
+    ↓
+Persist Notification (PENDING)
+    ↓
+SMTP (Brevo)
+    ↓
+Customer Email
+    ↓
+Update Status (SENT / FAILED)
+```
+
+#### Implemented Features
+
+* Added Kafka-based asynchronous notification processing.
+* Added notification persistence with delivery tracking.
+* Added notification statuses: `PENDING`, `SENT`, `FAILED`.
+* Added retry count mechanism for failed notifications.
+* Added HTML payment confirmation emails.
+* Added SMTP integration using Spring Mail.
+* Added configurable notification properties.
+* Added structured logging and error handling.
+
+---
+
+### SMTP Provider Migration
+
+```text
+Onet SMTP
+    ↓
+Account Blocked
+    ↓
+Authentication Failures
+    ↓
+Migration to Brevo
+```
+
+#### Why Brevo?
+
+* Transactional email provider.
+* SMTP compatible with Spring Boot.
+* Free tier available for development and portfolio projects.
+* Better deliverability than personal email accounts.
+* Dedicated SMTP credentials for application usage.
+
+---
+
+### Architecture Benefits
+
+* Asynchronous communication between services.
+* Loose coupling through Kafka events.
+* Improved scalability.
+* Better fault tolerance.
+* Notification delivery tracking.
+* Easy future extension for SMS and Push Notifications.
+
+```
+```
+
 ```
