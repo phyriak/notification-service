@@ -73,7 +73,7 @@ jobs:
             -e EMAIL_PASSWORD="${{ secrets.EMAIL_PASSWORD }}" \
             -e EMAIL_HOST="${{ secrets.EMAIL_HOST }}" \
             -e EMAIL_PORT="${{ secrets.EMAIL_PORT }}" \
-            -e EMAIL_PORT="${{ secrets.SENDER_EMAIL }}" \
+            -e SENDER_EMAIL="${{ secrets.SENDER_EMAIL }}" \
             phyriak/notification-service:latest
 
             echo "Waiting for application..."
