@@ -38,6 +38,13 @@ spring:
     password: ${EMAIL_PASSWORD}
     protocol: smtp
 
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
   kafka:
     bootstrap-servers: kafka:9092
