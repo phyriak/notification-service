@@ -32,8 +32,8 @@ spring:
 
 
   mail:
-    host: smtp.poczta.onet.pl
-    port: 587
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
     username: ${EMAIL_USER}
     password: ${EMAIL_PASSWORD}
     protocol: smtp
