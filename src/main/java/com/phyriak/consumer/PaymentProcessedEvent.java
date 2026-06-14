@@ -8,8 +8,9 @@ import java.util.UUID;
 public record PaymentProcessedEvent(
         UUID eventId,
         Long paymentId,
-        PaymentStatus status,
+        Long userId,
         Long orderId,
+        PaymentStatus status,
         BigDecimal amount,
         String currency,
         Instant processedAt,
