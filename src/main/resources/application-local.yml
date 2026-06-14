@@ -32,11 +32,16 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
 
+    listener:
+      auto-startup: false
+      ack-mode: record
+
+
   mail:
     host: smtp.poczta.onet.pl
     port: 587
-    username: piotr_hyriak@op.pl
-    password: simson1
+    username: ${EMAIL_USER}
+    password: ${EMAIL_PASSWORD}
 
 logging:
   level:
