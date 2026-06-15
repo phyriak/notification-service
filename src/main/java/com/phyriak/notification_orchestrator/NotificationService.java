@@ -8,6 +8,7 @@ import com.phyriak.notification_orchestrator.model.NotificationEntity;
 import com.phyriak.notification_orchestrator.model.NotificationStatus;
 import com.phyriak.notification_orchestrator.model.NotificationType;
 import com.phyriak.notification_orchestrator.repository.NotificationRepository;
+import com.phyriak.notification_orchestrator.service.NotificationIdempotencyService;
 import com.phyriak.payment_consumer.dto.PaymentProcessedEvent;
 import com.phyriak.payment_consumer.exception.PaymentEventException;
 import com.phyriak.payment_consumer.exception.SignupEventException;
@@ -27,6 +28,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final EmailPublisher emailPublisher;
     private final NotificationMapper notificationMapper;
+    private final NotificationIdempotencyService idempotencyService;
 
     @EventListener
     public void handleNewsletterSignup(NewsLetterSignupRequest request) {
@@ -40,6 +42,7 @@ public class NotificationService {
         try {
             emailPublisher.sendNewsletterSignup(request);
             setSentNotificationDetails(notification, NotificationStatus.SENT);
+            idempotencyService.markAsProcessed(request.getEventId());
             log.info("Signup notification sent successfully. eventId={}", request.getEventId());
 
         } catch (Exception ex) {
@@ -73,6 +76,7 @@ public class NotificationService {
         try {
             emailPublisher.sendPaymentEmail(event);
             setSentNotificationDetails(notification, NotificationStatus.SENT);
+            idempotencyService.markAsProcessed(event.eventId());
             log.info(
                     "Payment notification sent successfully. eventId={}, paymentId={}",
                     event.eventId(),

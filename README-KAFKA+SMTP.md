@@ -211,30 +211,39 @@ On Kafka retry after `FAILED`, the existing row is reused and send is attempted 
 3. `NotificationKafkaPublisher` publishes a Spring application event.
 4. `NotificationService` loads or creates a notification row (`NEW`).
 5. `EmailPublisher` sends the HTML email.
-6. Status updated to `SENT` or `FAILED`.
+6. Status updated to `SENT` or `FAILED`; on success, row added to `processed_events`.
 
 ---
 
 ## Idempotency
 
-Duplicate Kafka deliveries are handled via `notifications.event_id` (unique constraint in PostgreSQL).
+Duplicate Kafka deliveries are handled using two layers:
+
+| Layer | Table | Purpose |
+|-------|-------|---------|
+| Kafka consumer | `processed_events` | Fast lookup — event successfully consumed |
+| Business audit | `notifications` (`event_id` unique) | Full notification record and status |
 
 ### Rules
 
 | Scenario | Behaviour |
 |----------|-----------|
-| First delivery | Insert `NEW` → send → `SENT` |
-| Duplicate (already `SENT`) | Skipped at listener — no second email |
-| Retry after `FAILED` | Existing row reloaded → send retried |
-| Concurrent duplicates | Unique constraint + reload existing row |
+| First delivery | Insert `NEW` → send → `SENT` → save `processed_events` |
+| Duplicate (already in `processed_events`) | Skipped at listener — no second email |
+| Duplicate (`notifications` already `SENT`) | Skipped at listener — backward compatibility |
+| Retry after `FAILED` | Not in `processed_events` → reload row → retry send |
+| Concurrent duplicates | Unique constraints + reload existing row |
 | Payment without `eventId` | Skipped with error log |
 | Newsletter without `eventId` | UUID generated automatically |
 
 ### Implementation
 
-- `NotificationIdempotencyService` — checks `existsByEventIdAndStatus(eventId, SENT)` before processing.
+- `NotificationIdempotencyService.shouldSkipProcessing()` — checks `processed_events` and `notifications` (`SENT`).
+- `NotificationIdempotencyService.markAsProcessed()` — saves `ProcessedEvent` after successful email delivery.
 - `NotificationRepository.findByEventId(UUID)` — loads existing rows for retries.
 - Unique constraint `uq_event_id` on `notifications.event_id`.
+
+`processed_events` is written **only after success** so Kafka can still retry when status is `FAILED`.
 
 ---
 
@@ -329,9 +338,22 @@ SMTP access can be restricted to authorized IP addresses in the Brevo dashboard.
 
 ## Database
 
-Notifications are stored in the `notifications` table (Liquibase migration `002-create-notification-events.yaml`).
+### `notifications`
+
+Stores notification records (Liquibase migration `002-create-notification-events.yaml`).
 
 Key columns: `event_id` (UUID, unique), `email`, `type`, `subject`, `message`, `status`, `retry_count`, `created_at`, `updated_at`.
+
+### `processed_events`
+
+Kafka consumer idempotency log (Liquibase migration `001-create-processed-events.yaml`).
+
+| Column | Description |
+|--------|-------------|
+| `event_id` | Primary key — same UUID as the Kafka event |
+| `processed_at` | Timestamp when email was successfully delivered |
+
+Written by `NotificationIdempotencyService.markAsProcessed()` after status becomes `SENT`.
 
 UAT uses `ddl-auto: validate` with Liquibase enabled.
 
