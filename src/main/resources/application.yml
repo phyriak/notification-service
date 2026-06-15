@@ -17,6 +17,6 @@ management:
       exposure:
         include: info,health,prometheus
 
-notification:
+email-notification:
    system-email: ${SENDER_EMAIL}
    retry-count: 3

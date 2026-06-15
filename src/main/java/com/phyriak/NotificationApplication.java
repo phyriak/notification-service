@@ -1,13 +1,12 @@
 package com.phyriak;
 
-import com.phyriak.consumer.NotificationProperties;
+import com.phyriak.email.EmailProperties;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(NotificationProperties.class)
+@EnableConfigurationProperties(EmailProperties.class)
 public class NotificationApplication {
     public static void main(String[] args) {
         SpringApplication.run(NotificationApplication.class, args);

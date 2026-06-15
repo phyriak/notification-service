@@ -1,4 +1,4 @@
-package com.phyriak.consumer;
+package com.phyriak.payment_consumer.dto;
 
 
 import java.math.BigDecimal;

@@ -1,32 +1,35 @@
-package com.phyriak.consumer;
+package com.phyriak.notification_orchestrator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phyriak.newsletter.NewsLetterSignupEvent;
-import com.phyriak.newsletter.NotificationService;
-import com.phyriak.repository.ProcessedEventRepository;
-import com.phyriak.repository.model.ProcessedEvent;
+import com.phyriak.newsletter.model.NewsLetterSignupRequest;
+import com.phyriak.notification_orchestrator.service.NotificationIdempotencyService;
+import com.phyriak.notification_orchestrator.service.NotificationKafkaPublisher;
+import com.phyriak.payment_consumer.dto.PaymentProcessedEvent;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-
 @Component
 @Slf4j
 @AllArgsConstructor
-public class KafkaConsumer {
+public class NotificationKafkaListener {
     private ObjectMapper objectMapper;
-    private NotificationService notificationService;
-    private ProcessedEventRepository eventRepository;
+    private NotificationKafkaPublisher notificationService;
+    private NotificationIdempotencyService idempotencyService;
 
 
     @KafkaListener(topics = "newsletter.signup", groupId = "notification-group")
     public void listen(String message) throws Exception {
         try {
-            NewsLetterSignupEvent event = objectMapper.readValue(message, NewsLetterSignupEvent.class);
-            //Validation
-            notificationService.signup(event);
+            NewsLetterSignupRequest request = objectMapper.readValue(message, NewsLetterSignupRequest.class);
+            request.setEventId(idempotencyService.resolveEventId(request.getEventId()));
+
+            if (idempotencyService.shouldSkipProcessing(request.getEventId())) {
+                return;
+            }
+
+            notificationService.signup(request);
 
         } catch (Exception e) {
             log.error("Processing failed for message: {}", message, e);
@@ -44,21 +47,13 @@ public class KafkaConsumer {
         try {
             PaymentProcessedEvent event =
                     objectMapper.readValue(message, PaymentProcessedEvent.class);
-            //Validation
-            if (eventRepository.existsById(event.eventId())) {
-                log.info("Duplicate event {}", event.eventId());
+
+            if (idempotencyService.shouldSkipProcessing(event.eventId())) {
                 return;
             }
 
-            //todo when fails add to ddl later in next steps
             notificationService.paymentNotify(event);
 
-            eventRepository.save(
-                    new ProcessedEvent(
-                            event.eventId(),
-                            Instant.now()
-                    )
-            );
         } catch (Exception e) {
             log.error("Processing failed for message: {}", message, e);
             throw e;

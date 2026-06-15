@@ -1,4 +1,4 @@
-package com.phyriak.repository.model;
+package com.phyriak.payment_consumer.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

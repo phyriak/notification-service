@@ -45,8 +45,6 @@ spring:
           starttls:
             enable: true
 
-        debug: true
-
 
   kafka:
     bootstrap-servers: kafka:9092

@@ -1,4 +1,4 @@
-package com.phyriak.consumer;
+package com.phyriak.payment_consumer.dto;
 
 
 import java.math.BigDecimal;
@@ -8,7 +8,7 @@ import java.util.UUID;
 public record PaymentProcessedEvent(
         UUID eventId,
         Long paymentId,
-        Long userId,
+        String userId,
         Long orderId,
         PaymentStatus status,
         BigDecimal amount,

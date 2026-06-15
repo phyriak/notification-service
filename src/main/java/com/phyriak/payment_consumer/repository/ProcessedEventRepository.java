@@ -1,6 +1,6 @@
-package com.phyriak.repository;
+package com.phyriak.payment_consumer.repository;
 
-import com.phyriak.repository.model.ProcessedEvent;
+import com.phyriak.payment_consumer.model.ProcessedEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

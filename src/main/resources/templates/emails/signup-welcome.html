@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6;">
+<h2>Welcome to Our Store!</h2>
+
+<p>
+    Hi <strong th:text="${firstName}">Customer</strong>,
+</p>
+
+<p>
+    Thank you for signing up. Your account has been created successfully.
+</p>
+
+<p>
+    We're excited to have you with us and look forward to helping you find great products.
+</p>
+
+<p>
+    <strong>Email:</strong>
+    <span th:text="${email}"></span>
+</p>
+
+<p>
+    If you have any questions, simply reply to this email.
+</p>
+
+<br>
+
+<p>
+    Best regards,<br>
+    <strong>E-Commerce Team</strong>
+</p>
+</body>
+</html>

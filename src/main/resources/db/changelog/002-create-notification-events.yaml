@@ -18,9 +18,9 @@ databaseChangeLog:
 
               - column:
                   name: user_id
-                  type: bigint
+                  type: varchar(255)
                   constraints:
-                    nullable: false
+                    nullable: true
 
               - column:
                   name: email
@@ -41,10 +41,22 @@ databaseChangeLog:
                     nullable: false
 
               - column:
+                  name: first_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+
+              - column:
                   name: message
                   type: varchar(5000)
                   constraints:
-                    nullable: false
+                    nullable: true
+
+              - column:
+                  name: event_id
+                  type: uuid
+                  constraints:
+                    nullable: true
 
               - column:
                   name: status
@@ -59,7 +71,16 @@ databaseChangeLog:
               - column:
                   name: created_at
                   type: timestamp
+                  constraints:
+                    nullable: false
 
               - column:
-                  name: sent_at
+                  name: updated_at
                   type: timestamp
+                  constraints:
+                    nullable: false
+
+        - addUniqueConstraint:
+            tableName: notifications
+            columnNames: event_id
+            constraintName: uq_event_id
